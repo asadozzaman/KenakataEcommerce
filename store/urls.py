@@ -5,7 +5,7 @@ app_name = 'store'
 
 
 urlpatterns = [
-    path('',views.home, name = 'index' ),
+    path('',views.HomeListView.as_view(), name = 'index' ),
 
 ]
 
