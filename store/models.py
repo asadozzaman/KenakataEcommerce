@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 # Create your models here.
 
 class Category(models.Model):
@@ -25,10 +26,19 @@ class Product(models.Model):
     price = models.FloatField()
     old_price = models.FloatField(default=0.00)
     is_stock = models.BooleanField(default=True)
+    slug = models.SlugField(unique=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['-created',]
+        ordering = ['-created']
+
+    def get_product_url(self):
+        return reverse('store:product-details',kwargs={'slug': self.slug})
+
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args,**kwargs)
