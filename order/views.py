@@ -14,6 +14,7 @@ def add_to_cart(request,pk):
             size = request.POST.get('size')
             color = request.POST.get('color')
             quantity = request.POST.get('quantity')
+            print('iffffff'+color)
             if quantity:
                 order_item[0].quantity += int(quantity)
             else:
@@ -25,6 +26,7 @@ def add_to_cart(request,pk):
         else:
             size = request.POST.get('size')
             color = request.POST.get('color')
+            print('elseeeeeeeee' + color)
             order_item[0].size = size
             order_item[0].color = color
             order.orderitems.add(order_item[0])
@@ -34,5 +36,17 @@ def add_to_cart(request,pk):
         order.save()
         order.orderitems.add(order_item[0])
         return redirect('store:index')
+
+def cart_view(request):
+        carts = Cart.objects.filter(user=request.user, purchased=False)
+        orders = Order.objects.filter(user=request.user, ordered=False)
+        if carts.exists() and orders.exists():
+            order = orders[0]
+            context = {
+                'carts': carts,
+                'order': order,
+            }
+            return  render(request, 'store/cart.html', context)
+
 
 

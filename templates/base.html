@@ -116,7 +116,8 @@
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="dropdown-cart-products">
                                     {% if request.user.is_authenticated %}
-                                        {% for cart in request.user|cart_view %}
+                                        {% if request.user|cart_view %}
+                                            {% for cart in request.user|cart_view %}
                                     <div class="product">
                                         <div class="product-cart-details">
                                             <h4 class="product-title">
@@ -136,7 +137,8 @@
                                         </figure>
                                         <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                     </div><!-- End .product -->
-                                        {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
                                     {% endif %}
                                 </div><!-- End .cart-product -->
 
@@ -147,10 +149,11 @@
                                     {% else %}
                                     <span class="cart-total-price">$${{request.user|cart_total}}</span>
                                     {% endif %}
+
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
+                                    <a href="{% url 'order:cart' %}" class="btn btn-primary">View Cart</a>
                                     <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
