@@ -67,9 +67,9 @@
 
 											<td class="quantity-col">
 												<div class="cart-product-quantity">
-													<a class="mr-2" href="#"><span class=" badge badge-light"><i class="las la-minus"></i></span></a>
+													<a class="mr-2" href="{% url 'order:decrease' pk=cart.item.pk %}">-<span class=" badge badge-light"><i class="las la-minus"></i></span></a>
 														<span>{{ cart.quantity }}</span>
-													<a class="mr-2" href="#"><span class=" badge badge-light"><i class="las la-plus"></i></i></span></a>
+													<a class="mr-2" href="{% url 'order:increase' pk=cart.item.pk %}">+<span class=" badge badge-light"><i class="las la-plus"></i></i></span></a>
 
 
 												</div><!-- End .cart-product-quantity -->
