@@ -82,7 +82,7 @@
 												{% endif %}
 
 											</td>
-											<td class="remove-col"><a href=""><button class="btn-remove"><i class="icon-close"></i></button></a></td>
+											<td class="remove-col"><a href="{% url 'order:remove-item' pk=cart.item.pk %}"><button class="btn-remove"><i class="icon-close"></i></button></a></td>
 										</tr>
 									{% endfor %}
 
