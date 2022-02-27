@@ -33,6 +33,7 @@ class CheckoutTemplateView(TemplateView):
             'order_item': order_item,
             'order_total': order_total,
             'payment_method': payment_method,
+            'paypal_client_id': settings.PAYPAL_CLIENT_ID,
 
         }
         return render(request, 'store/checkout.html', context)
