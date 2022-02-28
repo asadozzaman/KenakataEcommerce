@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from account.forms import RegistrationForm
+from account.forms import RegistrationForm,ProfileForm
 
 #auth function
 
@@ -53,16 +53,20 @@ def CustomerLogin(request):
 
 # customers profile
 
+
 class ProfileView(TemplateView):
     def get(self, request, *args, **kwargs):
         orders = Order.objects.filter(user=request.user, ordered=True)
         billingaddress = BillingAddress.objects.get(user=request.user)
         billingaddress_form = BillingAddressForm(instance=billingaddress)
 
+        profile_obj = Profile.objects.get(user=request.user)
+        profileForm = ProfileForm(instance=profile_obj)
 
         context = {
             'orders': orders,
             'billingaddress': billingaddress_form,
+            'profileForm':profileForm,
         }
         return render(request, 'profile.html', context)
 
@@ -71,8 +75,14 @@ class ProfileView(TemplateView):
         if request.method == 'post' or request.method == 'POST':
             billingaddress = BillingAddress.objects.get(user=request.user)
             billingaddress_form = BillingAddressForm(request.POST, instance=billingaddress)
-            if billingaddress_form.is_valid():
+            profile_obj = Profile.objects.get(user=request.user)
+            profileForm = ProfileForm(request.POST, instance=profile_obj)
+            if billingaddress_form.is_valid() or profileForm.is_valid():
                 billingaddress_form.save()
+                profileForm.save()
                 return redirect('account:profile')
+
+
+
 
 
