@@ -7,6 +7,14 @@ from account.forms import RegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 
+
+from order.models import Cart, Order
+from payment.models import BillingAddress
+from payment.forms import BillingAddressForm
+from account.models import Profile
+
+from django.views.generic import TemplateView
+
 # Create your views here.
 
 
@@ -41,3 +49,25 @@ def CustomerLogin(request):
                 return HttpResponse("404")
 
     return render(request,'login.html')
+
+
+# customers profile
+
+class ProfileView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(user=request.user, ordered=True)
+        billingaddress = BillingAddress.objects.get(user=request.user)
+        billingaddress_form = BillingAddressForm(instance=billingaddress)
+
+
+        context = {
+            'orders': orders,
+            'billingaddress': billingaddress_form,
+        }
+        return render(request, 'profile.html', context)
+
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
