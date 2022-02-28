@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from account.forms import RegistrationForm
 
@@ -68,6 +68,11 @@ class ProfileView(TemplateView):
 
 
     def post(self, request, *args, **kwargs):
-        pass
+        if request.method == 'post' or request.method == 'POST':
+            billingaddress = BillingAddress.objects.get(user=request.user)
+            billingaddress_form = BillingAddressForm(request.POST, instance=billingaddress)
+            if billingaddress_form.is_valid():
+                billingaddress_form.save()
+                return redirect('account:profile')
 
 
