@@ -5,7 +5,11 @@ from django.utils import timezone
 
 from coupon.models import Coupon
 from coupon.forms import CouponCodeForm
+
+from notification.notific import SendNotification
+
 # Create your views here.
+
 
 def add_to_cart(request, pk):
     if request.user.is_authenticated:
@@ -25,6 +29,9 @@ def add_to_cart(request, pk):
                 order_item[0].size = size
                 order_item[0].color = color
                 order_item[0].save()
+                message = f"Quantity updated"
+                SendNotification(request.user, message)
+                print('if    notiiiiiiii')
                 return redirect('store:index')
             else:
                 size = request.POST.get('size')
@@ -32,11 +39,17 @@ def add_to_cart(request, pk):
                 order_item[0].size = size
                 order_item[0].color = color
                 order.orderitems.add(order_item[0])
+                print('else  1111111111111 noti')
+                message = f"Product updated cart"
+                SendNotification(request.user, message)
                 return redirect('store:index')
         else:
             order = Order(user=request.user)
             order.save()
             order.orderitems.add(order_item[0])
+            message = f"Product added to your cart"
+            SendNotification(request.user, message)
+            print('else  222222222 noti')
             return redirect('store:index')
     else:
         return redirect('account:login')
